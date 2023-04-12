@@ -152,8 +152,7 @@ BluetoothCharacteristic.prototype.toBuffer = function (value) {
 
 BluetoothCharacteristic.prototype.fromBuffer = function (buffer) {
   if (this.inputFormat === "TemperatureMeasurement") {
-    let tmp = buffer.readUIntLE(0, 6);
-    return convertTemperatureMeasurement(tmp);
+    return convertTemperatureMeasurement(buffer);
   }
 
   var value;
