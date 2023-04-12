@@ -210,33 +210,33 @@ BluetoothCharacteristic.prototype.disconnect = function () {
   }
 };
 
-function sfloat2double(ieee11073) {
-  var reservedValues = {
-    0x07FE: 'PositiveInfinity',
-    0x07FF: 'NaN',
-    0x0800: 'NaN',
-    0x0801: 'NaN',
-    0x0802: 'NegativeInfinity'
-  };
-  var mantissa = ieee11073 & 0x0FFF;
-
-
-  if (reservedValues.containsKey(mantissa)){
-    return 0.0; // basically error
-  }
-
-  if ((ieee11073 & 0x0800) !== 0){
-    mantissa =  -((ieee11073 & 0x0FFF) + 1 );
-  }else{
-    mantissa = (ieee11073 & 0x0FFF);
-  }
-
-  var exponent = ieee11073 >> 12;
-  if (((ieee11073 >> 12) & 0x8) !== 0){
-    exponent = -((~(ieee11073 >> 12) & 0x0F) + 1 );
-  }else{
-    exponent = ((ieee11073 >> 12) & 0x0F);
-  }
-  var magnitude = pow(10, exponent);
-  return (mantissa * magnitude);
-}
+// function sfloat2double(ieee11073) {
+//   var reservedValues = {
+//     0x07FE: 'PositiveInfinity',
+//     0x07FF: 'NaN',
+//     0x0800: 'NaN',
+//     0x0801: 'NaN',
+//     0x0802: 'NegativeInfinity'
+//   };
+//   var mantissa = ieee11073 & 0x0FFF;
+//
+//
+//   if (reservedValues.containsKey(mantissa)){
+//     return 0.0; // basically error
+//   }
+//
+//   if ((ieee11073 & 0x0800) !== 0){
+//     mantissa =  -((ieee11073 & 0x0FFF) + 1 );
+//   }else{
+//     mantissa = (ieee11073 & 0x0FFF);
+//   }
+//
+//   var exponent = ieee11073 >> 12;
+//   if (((ieee11073 >> 12) & 0x8) !== 0){
+//     exponent = -((~(ieee11073 >> 12) & 0x0F) + 1 );
+//   }else{
+//     exponent = ((ieee11073 >> 12) & 0x0F);
+//   }
+//   var magnitude = pow(10, exponent);
+//   return (mantissa * magnitude);
+// }
