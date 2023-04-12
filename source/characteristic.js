@@ -154,7 +154,7 @@ BluetoothCharacteristic.prototype.fromBuffer = function (buffer) {
   if (this.inputFormat === "TemperatureMeasurement") {
     let tmp = new Uint8Array(buffer);
 
-    return convertTemperatureMeasurement(tmp.buffer);
+    return extractFloatFromBuffer(tmp.buffer);
   }
 
   var value;
@@ -230,33 +230,19 @@ function convertTemperatureMeasurement(buffer) {
   return tempValue;
 }
 
-function sfloat2double(ieee11073) {
-  var reservedValues = {
-    0x07FE: 'PositiveInfinity',
-    0x07FF: 'NaN',
-    0x0800: 'NaN',
-    0x0801: 'NaN',
-    0x0802: 'NegativeInfinity'
-  };
-  var mantissa = ieee11073 & 0x0FFF;
+function extractFloatFromBuffer(buffer) {
+  // Extract the second byte of the buffer
+  const byte2 = buffer[1];
 
+  // Extract the IEEE 11073-20601 FLOAT value (16-bit) from the byte
+  const value = ((byte2 & 0xFF) << 8) | (byte2 >> 8);
 
-  if (reservedValues.containsKey(mantissa)){
-    return 0.0; // basically error
-  }
+  // Convert the value to a float
+  const exponent = (value >> 11) & 0x1F;
+  const mantissa = value & 0x7FF;
+  const sign = (value & 0x8000) ? -1 : 1;
+  const fraction = 1 + (mantissa / 2048);
+  const floatValue = sign * fraction * Math.pow(10, exponent - 15);
 
-  if ((ieee11073 & 0x0800) !== 0){
-    mantissa =  -((ieee11073 & 0x0FFF) + 1 );
-  }else{
-    mantissa = (ieee11073 & 0x0FFF);
-  }
-
-  var exponent = ieee11073 >> 12;
-  if (((ieee11073 >> 12) & 0x8) !== 0){
-    exponent = -((~(ieee11073 >> 12) & 0x0F) + 1 );
-  }else{
-    exponent = ((ieee11073 >> 12) & 0x0F);
-  }
-  var magnitude = pow(10, exponent);
-  return (mantissa * magnitude);
+  return floatValue;
 }
