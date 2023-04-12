@@ -26,7 +26,7 @@ function BluetoothCharacteristic(log, config, prefix) {
     throw new Error(this.prefix + " Missing mandatory config 'UUID'");
   }
   this.UUID = config.UUID;
-  this.inputFormat = config.inputFormat;
+  // this.inputFormat = config.inputFormat;
 
   this.log.debug(this.prefix, "Initialized | Characteristic." + this.type + " (" + this.UUID + ")");
 
@@ -151,10 +151,10 @@ BluetoothCharacteristic.prototype.toBuffer = function (value) {
 
 
 BluetoothCharacteristic.prototype.fromBuffer = function (buffer) {
-  if (this.inputFormat === "IEEE11073") {
-    let tmp = buffer.readUInt32LE(0);
-    return sfloat2double(tmp);
-  }
+  // if (this.inputFormat === "IEEE11073") {
+  //   let tmp = buffer.readUInt32LE(0);
+  //   return sfloat2double(tmp);
+  // }
 
   var value;
 
