@@ -219,7 +219,7 @@ function convertTemperatureMeasurement(buffer) {
 
   // Extract the temperature value and flags from the buffer
   const view = new DataView(buffer);
-  const tempValue = view.getInt32(1, true) / 10;
+  const tempValue = view.getInt32(1, true);
   const flags = view.getUint8(0);
 
   // Check the flags to determine the temperature units (Celsius or Fahrenheit)
