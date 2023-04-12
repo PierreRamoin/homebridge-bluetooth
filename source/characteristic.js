@@ -225,5 +225,6 @@ function convertTemperatureMeasurement(buffer) {
   const units = (flags & 0x01) ? "F" : "C";
 
   // Return the temperature value as a float
-  return tempValue.toFixed(1) + " " + units;
+  // return tempValue.toFixed(1) + " " + units;
+  return tempValue;
 }
