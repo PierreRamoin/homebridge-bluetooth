@@ -26,7 +26,7 @@ function BluetoothCharacteristic(log, config, prefix) {
     throw new Error(this.prefix + " Missing mandatory config 'UUID'");
   }
   this.UUID = config.UUID;
-  // this.inputFormat = config.inputFormat;
+  this.inputFormat = config.inputFormat;
 
   this.log.debug(this.prefix, "Initialized | Characteristic." + this.type + " (" + this.UUID + ")");
 
@@ -151,10 +151,10 @@ BluetoothCharacteristic.prototype.toBuffer = function (value) {
 
 
 BluetoothCharacteristic.prototype.fromBuffer = function (buffer) {
-  // if (this.inputFormat === "IEEE11073") {
-  //   let tmp = buffer.readUInt32LE(0);
-  //   return sfloat2double(tmp);
-  // }
+  if (this.inputFormat === "TemperatureMeasurement") {
+    let tmp = buffer.readUIntLE(0, 6);
+    return convertTemperatureMeasurement(tmp);
+  }
 
   var value;
 
@@ -210,33 +210,20 @@ BluetoothCharacteristic.prototype.disconnect = function () {
   }
 };
 
-// function sfloat2double(ieee11073) {
-//   var reservedValues = {
-//     0x07FE: 'PositiveInfinity',
-//     0x07FF: 'NaN',
-//     0x0800: 'NaN',
-//     0x0801: 'NaN',
-//     0x0802: 'NegativeInfinity'
-//   };
-//   var mantissa = ieee11073 & 0x0FFF;
-//
-//
-//   if (reservedValues.containsKey(mantissa)){
-//     return 0.0; // basically error
-//   }
-//
-//   if ((ieee11073 & 0x0800) !== 0){
-//     mantissa =  -((ieee11073 & 0x0FFF) + 1 );
-//   }else{
-//     mantissa = (ieee11073 & 0x0FFF);
-//   }
-//
-//   var exponent = ieee11073 >> 12;
-//   if (((ieee11073 >> 12) & 0x8) !== 0){
-//     exponent = -((~(ieee11073 >> 12) & 0x0F) + 1 );
-//   }else{
-//     exponent = ((ieee11073 >> 12) & 0x0F);
-//   }
-//   var magnitude = pow(10, exponent);
-//   return (mantissa * magnitude);
-// }
+function convertTemperatureMeasurement(buffer) {
+  // Check if the buffer is valid
+  if (buffer.byteLength < 5) {
+    return null;
+  }
+
+  // Extract the temperature value and flags from the buffer
+  const view = new DataView(buffer);
+  const tempValue = view.getInt32(1, true) / 10;
+  const flags = view.getUint8(0);
+
+  // Check the flags to determine the temperature units (Celsius or Fahrenheit)
+  const units = (flags & 0x01) ? "F" : "C";
+
+  // Return the temperature value as a float
+  return tempValue.toFixed(1) + " " + units;
+}
