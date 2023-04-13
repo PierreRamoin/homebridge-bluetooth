@@ -1,5 +1,5 @@
 var Characteristic;
-var Chalk = require('chalk');
+import * as Chalk from 'chalk';
 
 module.exports = function (characteristic) {
   Characteristic = characteristic;
