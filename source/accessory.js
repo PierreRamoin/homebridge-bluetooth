@@ -1,5 +1,5 @@
 var Accessory, BluetoothService;
-var Chalk = require('chalk');
+import * as Chalk from 'chalk';
 
 module.exports = function (accessory, bluetoothService) {
   Accessory = accessory;
