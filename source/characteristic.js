@@ -151,9 +151,10 @@ BluetoothCharacteristic.prototype.toBuffer = function (value) {
 
 
 BluetoothCharacteristic.prototype.fromBuffer = function (buffer) {
-  if (this.inputFormat === "IEEE11073") {
-    let tmp = buffer.readUInt32LE(0);
-    return sfloat2double(tmp);
+  if (this.inputFormat === "TemperatureMeasurement") {
+    let tmp = new Uint8Array(buffer);
+
+    return convertTemperatureMeasurement(tmp.buffer);
   }
 
   var value;
@@ -210,33 +211,40 @@ BluetoothCharacteristic.prototype.disconnect = function () {
   }
 };
 
-function sfloat2double(ieee11073) {
-  var reservedValues = {
-    0x07FE: 'PositiveInfinity',
-    0x07FF: 'NaN',
-    0x0800: 'NaN',
-    0x0801: 'NaN',
-    0x0802: 'NegativeInfinity'
-  };
-  var mantissa = ieee11073 & 0x0FFF;
-
-
-  if (reservedValues.containsKey(mantissa)){
-    return 0.0; // basically error
+function convertTemperatureMeasurement(buffer) {
+  // Check if the buffer is valid
+  if (buffer.byteLength < 5) {
+    return null;
   }
 
-  if ((ieee11073 & 0x0800) !== 0){
-    mantissa =  -((ieee11073 & 0x0FFF) + 1 );
-  }else{
-    mantissa = (ieee11073 & 0x0FFF);
-  }
+  // Extract the temperature value and flags from the buffer
+  const view = new DataView(buffer);
+  const tempValue = view.getInt32(1, true);
+  const flags = view.getUint8(0);
 
-  var exponent = ieee11073 >> 12;
-  if (((ieee11073 >> 12) & 0x8) !== 0){
-    exponent = -((~(ieee11073 >> 12) & 0x0F) + 1 );
-  }else{
-    exponent = ((ieee11073 >> 12) & 0x0F);
-  }
-  var magnitude = pow(10, exponent);
-  return (mantissa * magnitude);
+  // Check the flags to determine the temperature units (Celsius or Fahrenheit)
+  const units = (flags & 0x01) ? "F" : "C";
+
+  // Return the temperature value as a float
+  return tempValue.toFixed(2);
+  return tempValue;
 }
+
+
+function extractFloatFromBuffer(buffer) {
+  // Extract the second byte of the buffer
+  const byte2 = buffer[1];
+
+  // Extract the IEEE 11073-20601 FLOAT value (16-bit) from the byte
+  const value = ((byte2 & 0xFF) << 8) | (byte2 >> 8);
+
+  // Convert the value to a float
+  const exponent = (value >> 11) & 0x1F;
+  const mantissa = value & 0x7FF;
+  const sign = (value & 0x8000) ? -1 : 1;
+  const fraction = 1 + (mantissa / 2048);
+  const floatValue = sign * fraction * Math.pow(10, exponent - 15);
+
+  return floatValue;
+}
+
