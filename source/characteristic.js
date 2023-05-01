@@ -1,12 +1,14 @@
-var Characteristic;
-import * as Chalk from 'chalk';
+import chalk from 'chalk';
+import moment from "moment";
 
-module.exports = function (characteristic) {
+let Characteristic;
+let HistoryService;
+
+export default function (characteristic, historyService) {
   Characteristic = characteristic;
-
+  HistoryService = historyService
   return BluetoothCharacteristic;
-};
-
+}
 
 function BluetoothCharacteristic(log, config, prefix) {
   this.log = log;
@@ -15,7 +17,7 @@ function BluetoothCharacteristic(log, config, prefix) {
     throw new Error(this.prefix + " Missing mandatory config 'type'");
   }
   this.type = config.type;
-  this.prefix = prefix + " " + Chalk.green("[" + this.type + "]");
+  this.prefix = prefix + " " + chalk.green("[" + this.type + "]");
   if (!Characteristic[this.type]) {
     throw new Error(this.prefix + " Characteristic type '" + this.type + "' is not defined. " +
                     "See 'HAP-NodeJS/lib/gen/HomeKitType.js' for options.")
@@ -27,6 +29,9 @@ function BluetoothCharacteristic(log, config, prefix) {
   }
   this.UUID = config.UUID;
   this.inputFormat = config.inputFormat;
+  if (config.history === true) {
+    this.loggingService = new HistoryService("weather", {name: "test", log: this.log}, { storage: 'fs' });
+  }
 
   this.log.debug(this.prefix, "Initialized | Characteristic." + this.type + " (" + this.UUID + ")");
 
@@ -151,13 +156,30 @@ BluetoothCharacteristic.prototype.toBuffer = function (value) {
 
 
 BluetoothCharacteristic.prototype.fromBuffer = function (buffer) {
+  let value;
 
+  value = this.fromBufferWithInputFormat(buffer)
+
+  if (value == null) {
+     value = this.fromBufferWithFormat(buffer);
+  }
+
+  if ((this.loggingService != null) && (value != null)) {
+    this.loggingService.addEntry({time: moment().unix(), temp: value});
+  }
+  return value;
+};
+
+BluetoothCharacteristic.prototype.fromBufferWithInputFormat = function (buffer) {
   if (this.inputFormat === "TemperatureCelsius") {
     let readInt16LE = buffer.readInt16LE(0);
     return readInt16LE / 100.
   }
+  return null;
+}
 
-  var value;
+BluetoothCharacteristic.prototype.fromBufferWithFormat = function (buffer) {
+  let value;
 
   switch (this.homebridgeCharacteristic.props['format']) {
     case Characteristic.Formats.BOOL: // BLECharCharacteristic
@@ -187,10 +209,10 @@ BluetoothCharacteristic.prototype.fromBuffer = function (buffer) {
     default:
       value = 0;
       this.log.error(this.prefix, "Unsupported data conversion | " +
-                     this.homebridgeCharacteristic.props['format']);
+          this.homebridgeCharacteristic.props['format']);
   }
   return value;
-};
+}
 
 
 BluetoothCharacteristic.prototype.disconnect = function () {

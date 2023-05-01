@@ -1,13 +1,12 @@
 var Accessory, BluetoothService;
-import * as Chalk from 'chalk';
+import chalk from 'chalk';
 
-module.exports = function (accessory, bluetoothService) {
+export default function (accessory, bluetoothService) {
   Accessory = accessory;
   BluetoothService = bluetoothService;
 
   return BluetoothAccessory;
-};
-
+}
 
 function BluetoothAccessory(log, config) {
   this.log = log;
@@ -16,7 +15,7 @@ function BluetoothAccessory(log, config) {
     throw new Error("Missing mandatory config 'name'");
   }
   this.name = config.name;
-  this.prefix = Chalk.blue("[" + config.name + "]");
+  this.prefix = chalk.blue("[" + config.name + "]");
 
   if (!config.address) {
     throw new Error(this.prefix + " Missing mandatory config 'address'");
@@ -37,7 +36,7 @@ function BluetoothAccessory(log, config) {
 
   var informationServiceUUID = trimUUID('180A')
   if (!(informationServiceUUID in this.bluetoothServices)) {
-    informationServiceConfig = {
+    let informationServiceConfig = {
       "name": "Information",
       "type": "AccessoryInformation",
       "UUID": "180A",
