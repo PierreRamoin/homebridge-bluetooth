@@ -1,5 +1,5 @@
 var Characteristic;
-var Chalk = require('chalk');
+import * as Chalk from 'chalk';
 
 module.exports = function (characteristic) {
   Characteristic = characteristic;
@@ -26,6 +26,7 @@ function BluetoothCharacteristic(log, config, prefix) {
     throw new Error(this.prefix + " Missing mandatory config 'UUID'");
   }
   this.UUID = config.UUID;
+  this.inputFormat = config.inputFormat;
 
   this.log.debug(this.prefix, "Initialized | Characteristic." + this.type + " (" + this.UUID + ")");
 
@@ -150,7 +151,14 @@ BluetoothCharacteristic.prototype.toBuffer = function (value) {
 
 
 BluetoothCharacteristic.prototype.fromBuffer = function (buffer) {
+
+  if (this.inputFormat === "TemperatureCelsius") {
+    let readInt16LE = buffer.readInt16LE(0);
+    return readInt16LE / 100.
+  }
+
   var value;
+
   switch (this.homebridgeCharacteristic.props['format']) {
     case Characteristic.Formats.BOOL: // BLECharCharacteristic
       value = buffer.readInt8(0);
