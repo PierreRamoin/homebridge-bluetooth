@@ -1,14 +1,13 @@
 var Noble, UUIDGen, Accessory, BluetoothAccessory;
 
-module.exports = function (noble, uuidGen, accessory, bluetoothAccessory) {
+export default function (noble, uuidGen, accessory, bluetoothAccessory) {
   Noble = noble;
   UUIDGen = uuidGen
   Accessory = accessory;
   BluetoothAccessory = bluetoothAccessory;
 
   return BluetoothPlatform;
-};
-
+}
 
 function BluetoothPlatform(log, config, homebridgeAPI) {
   this.log = log;

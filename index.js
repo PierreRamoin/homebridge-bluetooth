@@ -1,18 +1,24 @@
+import noble from "noble";
+import BluetoothCharacteristicFactory from "./source/characteristic.js";
+import BluetoothServiceFactory from "./source/service.js";
+import BluetoothAccessoryFactory from "./source/accessory.js";
+import BluetoothPlatformFactory from "./source/platform.js";
+
 var Noble, Accessory, Service, Characteristic, UUIDGen;
 
-module.exports = function (homebridge) {
+export default function (homebridge) {
   console.log("Homebridge API version: " + homebridge.version);
 
-  Noble = require('noble');
+  Noble = noble;
   Accessory = homebridge.platformAccessory;
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen = homebridge.hap.uuid;
 
-  BluetoothCharacteristic = require("./source/characteristic.js")(Characteristic);
-  BluetoothService = require("./source/service.js")(Service, BluetoothCharacteristic);
-  BluetoothAccessory = require("./source/accessory.js")(Accessory, BluetoothService);
-  BluetoothPlatform = require("./source/platform.js")(Noble, UUIDGen, Accessory, BluetoothAccessory);
+  let BluetoothCharacteristic = BluetoothCharacteristicFactory(Characteristic);
+  let BluetoothService = BluetoothServiceFactory(Service, BluetoothCharacteristic);
+  let BluetoothAccessory = BluetoothAccessoryFactory(Accessory, BluetoothService);
+  let BluetoothPlatform = BluetoothPlatformFactory(Noble, UUIDGen, Accessory, BluetoothAccessory);
 
   homebridge.registerPlatform("homebridge-bluetooth", "Bluetooth", BluetoothPlatform, true);
-};
+}
