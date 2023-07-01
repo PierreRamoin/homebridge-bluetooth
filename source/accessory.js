@@ -8,8 +8,10 @@ export default function (accessory, bluetoothService) {
   return BluetoothAccessory;
 }
 
-function BluetoothAccessory(log, config) {
+function BluetoothAccessory(log, config, historyService) {
   this.log = log;
+  Accessory.log = this.log;
+  this.loggingService = new historyService("weather", Accessory, length);
 
   if (!config.name) {
     throw new Error("Missing mandatory config 'name'");

@@ -1,12 +1,11 @@
 import chalk from 'chalk';
 import moment from "moment";
+import Accessory from "./accessory.js";
 
 let Characteristic;
-let HistoryService;
 
-export default function (characteristic, historyService) {
+export default function (characteristic) {
   Characteristic = characteristic;
-  HistoryService = historyService
   return BluetoothCharacteristic;
 }
 
@@ -29,12 +28,8 @@ function BluetoothCharacteristic(log, config, prefix) {
   }
   this.UUID = config.UUID;
   this.inputFormat = config.inputFormat;
-  if (config.history === true) {
-    this.loggingService = new HistoryService("weather", {name: "test", log: this.log}, { storage: 'fs' });
-  }
 
   this.log.debug(this.prefix, "Initialized | Characteristic." + this.type + " (" + this.UUID + ")");
-
   this.homebridgeCharacteristic = null;
   this.nobleCharacteristic = null;
 }
@@ -106,6 +101,7 @@ BluetoothCharacteristic.prototype.notify = function (buffer, notification) {
     var value = this.fromBuffer(buffer);
     this.log.info(this.prefix, "Notify | " + value);
     this.homebridgeCharacteristic.updateValue(value, null, this);
+    Accessory.loggingService.addEntry({time: Math.round(new Date().valueOf() / 1000), temp: value});
   }
 };
 
