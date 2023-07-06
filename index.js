@@ -6,7 +6,7 @@ import BluetoothPlatformFactory from "./source/platform.js";
 
 import FakeGatoHistoryFactory from "fakegato-history";
 
-var Noble, Accessory, Service, Characteristic, UUIDGen, FakeGatoHistoryService;
+var Noble, Accessory, Service, Characteristic, UUIDGen;
 
 export default function (homebridge) {
   console.log("Homebridge API version: " + homebridge.version);
@@ -17,7 +17,7 @@ export default function (homebridge) {
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen = homebridge.hap.uuid;
 
-  FakeGatoHistoryService = FakeGatoHistoryFactory(homebridge);
+  let FakeGatoHistoryService = FakeGatoHistoryFactory(homebridge);
   let BluetoothCharacteristic = BluetoothCharacteristicFactory(Characteristic);
   let BluetoothService = BluetoothServiceFactory(Service, BluetoothCharacteristic);
   let BluetoothAccessory = BluetoothAccessoryFactory(Accessory, BluetoothService, FakeGatoHistoryService);
