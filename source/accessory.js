@@ -1,6 +1,5 @@
 var Accessory, BluetoothService, FakeGatoHistoryService;
 import chalk from 'chalk';
-
 export default function (accessory, bluetoothService) {
   Accessory = accessory;
   BluetoothService = bluetoothService;
