@@ -4,7 +4,7 @@ import BluetoothServiceFactory from "./source/service.js";
 import BluetoothAccessoryFactory from "./source/accessory.js";
 import BluetoothPlatformFactory from "./source/platform.js";
 
-let fakegato = require('fakegato-history');
+import fakegato from "fakegato-history";
 
 var Noble, Accessory, Service, Characteristic, UUIDGen, FakeGatoHistoryService;
 
