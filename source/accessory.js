@@ -11,6 +11,7 @@ export default function (accessory, bluetoothService) {
 function BluetoothAccessory(log, config, historyService) {
   this.log = log;
   Accessory.log = this.log;
+  this.log.info("historyService: " + historyService)
   this.loggingService = new historyService.FakeGatoHistoryService("weather", Accessory);
 
   if (!config.name) {
