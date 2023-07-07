@@ -11,7 +11,6 @@ export default function (characteristic, fakeGatoHistoryService) {
 
 function BluetoothCharacteristic(log, config, prefix) {
   this.log = log;
-  this.loggingService = new FakeGatoHistoryService("weather", { displayName: prefix, log: this.log });
 
    if (!config.type) {
     throw new Error(this.prefix + " Missing mandatory config 'type'");
