@@ -4,8 +4,6 @@ import BluetoothServiceFactory from "./source/service.js";
 import BluetoothAccessoryFactory from "./source/accessory.js";
 import BluetoothPlatformFactory from "./source/platform.js";
 
-import fakegato from "fakegato-history";
-
 var Noble, Accessory, Service, Characteristic, UUIDGen, FakeGatoHistoryService;
 
 export default function (homebridge) {
@@ -16,7 +14,6 @@ export default function (homebridge) {
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen = homebridge.hap.uuid;
-  FakeGatoHistoryService = fakegato(homebridge);
   let BluetoothCharacteristic = BluetoothCharacteristicFactory(Characteristic, FakeGatoHistoryService);
   let BluetoothService = BluetoothServiceFactory(Service, BluetoothCharacteristic);
   let BluetoothAccessory = BluetoothAccessoryFactory(Accessory, BluetoothService);

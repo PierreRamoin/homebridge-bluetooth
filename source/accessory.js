@@ -9,6 +9,7 @@ export default function (accessory, bluetoothService) {
 
 function BluetoothAccessory(log, config) {
   this.log = log;
+  this.fakeGatoService = undefined;
   Accessory.log = this.log;
 
   if (!config.name) {
@@ -91,6 +92,11 @@ BluetoothAccessory.prototype.discoverServices = function (error, nobleServices) 
     if (!homebridgeService) {
       homebridgeService = this.homebridgeAccessory.addService(bluetoothService.class,
                                                               bluetoothService.name);
+    }
+    if (this.fakeGatoService !== undefined) {
+      this.log.info("Works on accessory !");
+    } else {
+      this.log.info("Booouuhh on accessory!");
     }
     bluetoothService.connect(nobleService, homebridgeService);
   }

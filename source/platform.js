@@ -1,5 +1,7 @@
 var Noble, UUIDGen, Accessory, BluetoothAccessory;
 
+import fakegato from "fakegato-history";
+
 export default function (noble, uuidGen, accessory, bluetoothAccessory) {
   Noble = noble;
   UUIDGen = uuidGen
@@ -11,7 +13,7 @@ export default function (noble, uuidGen, accessory, bluetoothAccessory) {
 
 function BluetoothPlatform(log, config, homebridgeAPI) {
   this.log = log;
-
+  this.FakeGatoHistoryService = fakegato(homebridgeAPI);
   if (!config) {
     this.log.warn("Missing mandatory platform config named 'Bluetooth'");
     return;
@@ -24,7 +26,8 @@ function BluetoothPlatform(log, config, homebridgeAPI) {
   this.bluetoothAccessories = {};
   for (var accessoryConfig of config.accessories) {
     var accessoryAddress = trimAddress(accessoryConfig.address);
-    var bluetoothAccessory = new BluetoothAccessory(this.log, accessoryConfig);
+    let bluetoothAccessory = new BluetoothAccessory(this.log, accessoryConfig);
+    bluetoothAccessory.fakeGatoService = new this.FakeGatoHistoryService("weather", bluetoothAccessory, {log: this.log})
     this.bluetoothAccessories[accessoryAddress] = bluetoothAccessory;
   }
   this.cachedHomebridgeAccessories = {};
