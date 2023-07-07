@@ -11,7 +11,7 @@ export default function (characteristic, fakeGatoHistoryService) {
 
 function BluetoothCharacteristic(log, config, prefix) {
   this.log = log;
-
+  this.fakeGatoService = undefined;
    if (!config.type) {
     throw new Error(this.prefix + " Missing mandatory config 'type'");
   }
@@ -101,7 +101,10 @@ BluetoothCharacteristic.prototype.notify = function (buffer, notification) {
     var value = this.fromBuffer(buffer);
     this.log.info(this.prefix, "Notify | " + value);
     this.homebridgeCharacteristic.updateValue(value, null, this);
-    this.loggingService.addEntry({time: Math.round(new Date().valueOf() / 1000), temp: value});
+    if (this.fakeGatoService !== undefined) {
+      this.fakeGatoService.addEntry({time: Math.round(new Date().valueOf() / 1000), temp: value});
+      this.log.info("Entry Added !");
+    }
   }
 };
 

@@ -94,9 +94,10 @@ BluetoothAccessory.prototype.discoverServices = function (error, nobleServices) 
                                                               bluetoothService.name);
     }
     if (this.fakeGatoService !== undefined) {
-      this.log.info("Works on accessory !");
+      this.log.info("works on accessory!");
+      bluetoothService.fakeGatoService = this.fakeGatoService;
     } else {
-      this.log.info("Booouuhh on accessory!");
+      this.log.warn("Booouuhh on accessory!");
     }
     bluetoothService.connect(nobleService, homebridgeService);
   }

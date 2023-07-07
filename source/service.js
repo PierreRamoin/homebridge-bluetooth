@@ -10,7 +10,7 @@ export default function (service, bluetoothCharacteristic) {
 
 function BluetoothService(log, config, prefix) {
   this.log = log;
-
+  this.fakeGatoService = undefined;
   if (!config.name) {
     throw new Error("Missing mandatory config 'name'");
   }
@@ -76,7 +76,12 @@ BluetoothService.prototype.discoverCharacteristics = function (error, nobleChara
       this.log.debug(this.prefix, "Ignored | Characteristic (" + nobleCharacteristic.uuid + ")");
       continue;
     }
-
+    if (this.fakeGatoService !== undefined) {
+      this.log.info("works on service!");
+      bluetoothCharacteristic.fakeGatoService = this.fakeGatoService;
+    } else {
+      this.log.warn("Booouuhh on service!");
+    }
     var homebridgeCharacteristic =
         this.homebridgeService.getCharacteristic(bluetoothCharacteristic.class);
     bluetoothCharacteristic.connect(nobleCharacteristic, homebridgeCharacteristic);
