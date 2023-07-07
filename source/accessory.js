@@ -1,15 +1,16 @@
 var Accessory, BluetoothService, FakeGatoHistoryService;
 import chalk from 'chalk';
-export default function (accessory, bluetoothService) {
+export default function (accessory, bluetoothService, fakeGatoHistoryService) {
   Accessory = accessory;
   BluetoothService = bluetoothService;
-
+  FakeGatoHistoryService = fakeGatoHistoryService;
   return BluetoothAccessory;
 }
 
 function BluetoothAccessory(log, config) {
   this.log = log;
   Accessory.log = this.log;
+  this.log.info(FakeGatoHistoryService)
   this.loggingService = new FakeGatoHistoryService("weather", Accessory);
 
   if (!config.name) {
