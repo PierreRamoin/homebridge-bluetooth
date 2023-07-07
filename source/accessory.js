@@ -10,7 +10,6 @@ export default function (accessory, bluetoothService) {
 function BluetoothAccessory(log, config) {
   this.log = log;
   Accessory.log = this.log;
-  this.log.info(FakeGatoHistoryService)
 
   if (!config.name) {
     throw new Error("Missing mandatory config 'name'");
