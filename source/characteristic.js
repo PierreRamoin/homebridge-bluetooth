@@ -1,16 +1,17 @@
 import chalk from 'chalk';
 import moment from "moment";
-import Accessory from "./accessory.js";
 
-let Characteristic;
+let Characteristic, FakeGatoHistoryService;
 
-export default function (characteristic) {
+export default function (characteristic, fakeGatoHistoryService) {
   Characteristic = characteristic;
+  FakeGatoHistoryService = fakeGatoHistoryService;
   return BluetoothCharacteristic;
 }
 
 function BluetoothCharacteristic(log, config, prefix) {
   this.log = log;
+  this.loggingService = new FakeGatoHistoryService("weather", Accessory);
 
    if (!config.type) {
     throw new Error(this.prefix + " Missing mandatory config 'type'");
@@ -101,7 +102,7 @@ BluetoothCharacteristic.prototype.notify = function (buffer, notification) {
     var value = this.fromBuffer(buffer);
     this.log.info(this.prefix, "Notify | " + value);
     this.homebridgeCharacteristic.updateValue(value, null, this);
-    Accessory.loggingService.addEntry({time: Math.round(new Date().valueOf() / 1000), temp: value});
+    this.loggingService.addEntry({time: Math.round(new Date().valueOf() / 1000), temp: value});
   }
 };
 

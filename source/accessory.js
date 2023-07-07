@@ -1,9 +1,9 @@
-var Accessory, BluetoothService, FakeGatoHistoryService;
+var Accessory, BluetoothService;
 import chalk from 'chalk';
-export default function (accessory, bluetoothService, fakeGatoHistoryService) {
+export default function (accessory, bluetoothService) {
   Accessory = accessory;
   BluetoothService = bluetoothService;
-  FakeGatoHistoryService = fakeGatoHistoryService;
+
   return BluetoothAccessory;
 }
 
@@ -11,7 +11,6 @@ function BluetoothAccessory(log, config) {
   this.log = log;
   Accessory.log = this.log;
   this.log.info(FakeGatoHistoryService)
-  this.loggingService = new FakeGatoHistoryService("weather", Accessory);
 
   if (!config.name) {
     throw new Error("Missing mandatory config 'name'");

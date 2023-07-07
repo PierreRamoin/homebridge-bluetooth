@@ -17,9 +17,9 @@ export default function (homebridge) {
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen = homebridge.hap.uuid;
   FakeGatoHistoryService = fakegato(homebridge);
-  let BluetoothCharacteristic = BluetoothCharacteristicFactory(Characteristic);
+  let BluetoothCharacteristic = BluetoothCharacteristicFactory(Characteristic, FakeGatoHistoryService);
   let BluetoothService = BluetoothServiceFactory(Service, BluetoothCharacteristic);
-  let BluetoothAccessory = BluetoothAccessoryFactory(Accessory, BluetoothService, FakeGatoHistoryService);
+  let BluetoothAccessory = BluetoothAccessoryFactory(Accessory, BluetoothService);
   let BluetoothPlatform = BluetoothPlatformFactory(Noble, UUIDGen, Accessory, BluetoothAccessory);
 
   homebridge.registerPlatform("homebridge-bluetooth", "Bluetooth", BluetoothPlatform, true);
