@@ -17,8 +17,7 @@ export default function (homebridge) {
   Characteristic = homebridge.hap.Characteristic;
   UUIDGen = homebridge.hap.uuid;
   FakeGatoHistoryService = fakegato(homebridge);
-  console.log(FakeGatoHistoryService)
-
+  homebridge.log.info(FakeGatoHistoryService)
   let BluetoothCharacteristic = BluetoothCharacteristicFactory(Characteristic);
   let BluetoothService = BluetoothServiceFactory(Service, BluetoothCharacteristic);
   let BluetoothAccessory = BluetoothAccessoryFactory(Accessory, BluetoothService);
