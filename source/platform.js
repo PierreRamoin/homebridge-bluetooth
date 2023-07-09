@@ -27,7 +27,7 @@ function BluetoothPlatform(log, config, homebridgeAPI) {
   for (var accessoryConfig of config.accessories) {
     var accessoryAddress = trimAddress(accessoryConfig.address);
     let bluetoothAccessory = new BluetoothAccessory(this.log, accessoryConfig);
-    bluetoothAccessory.fakeGatoService = new this.FakeGatoHistoryService("weather", {displayName: accessoryConfig.name, log: this.log}, {log: this.log})
+    bluetoothAccessory.fakeGatoService = new this.FakeGatoHistoryService("weather", bluetoothAccessory)
     this.bluetoothAccessories[accessoryAddress] = bluetoothAccessory;
   }
   this.cachedHomebridgeAccessories = {};
