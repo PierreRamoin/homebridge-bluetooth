@@ -44,6 +44,11 @@ function BluetoothPlatform(log, config, homebridgeAPI) {
 BluetoothPlatform.prototype.configureAccessory = function (homebridgeAccessory) {
   var accessoryAddress = homebridgeAccessory.context['address'];
   var bluetoothAccessory = this.bluetoothAccessories[accessoryAddress];
+  bluetoothAccessory.fakeGatoService = new this.FakeGatoHistoryService(
+      "room",
+      bluetoothAccessory,
+      {storage:'fs', path:"/homebridge"}
+  )
   if (!bluetoothAccessory) {
     this.log.debug("Removed | " + homebridgeAccessory.displayName + " (" + accessoryAddress + ")");
     this.homebridgeAPI.unregisterPlatformAccessories("homebridge-bluetooth", "Bluetooth",
