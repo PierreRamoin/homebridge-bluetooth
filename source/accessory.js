@@ -9,6 +9,7 @@ export default function (accessory, bluetoothService) {
 
 function BluetoothAccessory(log, config) {
   this.log = log;
+  this.displayName = config.name
   this.fakeGatoService = undefined;
   Accessory.log = this.log;
 
