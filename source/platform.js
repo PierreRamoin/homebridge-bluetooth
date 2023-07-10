@@ -32,7 +32,7 @@ function BluetoothPlatform(log, config, homebridgeAPI) {
         bluetoothAccessory,
         {storage:'fs', path:"/homebridge"}
     )
-    this.historyService = Eve.Services.History(bluetoothAccessory);
+    this.historyService = new Eve.Services.History(bluetoothAccessory);
     this.bluetoothAccessories[accessoryAddress] = bluetoothAccessory;
   }
   this.cachedHomebridgeAccessories = {};
