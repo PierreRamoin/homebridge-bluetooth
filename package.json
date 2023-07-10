@@ -22,9 +22,10 @@
     "homebridge": ">=0.4.6"
   },
   "dependencies": {
-    "noble": "abandonware/noble",
     "chalk": ">=1.1.1",
+    "fakegato-history": "^0.6.3",
+    "homebridge-lib": "^6.3.18",
     "moment": "^2.18.1",
-    "fakegato-history": "^0.6.3"
+    "noble": "abandonware/noble"
   }
 }

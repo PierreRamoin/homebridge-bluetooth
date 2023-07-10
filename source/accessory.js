@@ -1,5 +1,6 @@
 var Accessory, BluetoothService;
 import chalk from 'chalk';
+import eve from "homebridge-lib"
 export default function (accessory, bluetoothService) {
   Accessory = accessory;
   BluetoothService = bluetoothService;
@@ -9,7 +10,6 @@ export default function (accessory, bluetoothService) {
 
 function BluetoothAccessory(log, config) {
   this.log = log;
-  this.displayName = config.name
   this.fakeGatoService = undefined;
   Accessory.log = this.log;
 
@@ -17,6 +17,7 @@ function BluetoothAccessory(log, config) {
     throw new Error("Missing mandatory config 'name'");
   }
   this.name = config.name;
+  this.displayName = config.name
   this.prefix = chalk.blue("[" + config.name + "]");
 
   if (!config.address) {
@@ -50,6 +51,7 @@ function BluetoothAccessory(log, config) {
     };
     this.bluetoothServices[informationServiceUUID]
         = new BluetoothService(this.log, informationServiceConfig, this.prefix);
+
   }
 
   this.homebridgeAccessory = null;

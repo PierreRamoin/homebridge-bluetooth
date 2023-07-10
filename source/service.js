@@ -1,10 +1,10 @@
-var Service, BluetoothCharacteristic;
+var Service, BluetoothCharacteristic, Eve;
 import chalk from 'chalk';
 
-export default function (service, bluetoothCharacteristic) {
+export default function (service, bluetoothCharacteristic, eve) {
   Service = service;
   BluetoothCharacteristic = bluetoothCharacteristic;
-
+  Eve = eve;
   return BluetoothService;
 }
 
@@ -42,6 +42,7 @@ function BluetoothService(log, config, prefix) {
     var characteristicUUID = trimUUID(characteristicConfig.UUID);
     this.bluetoothCharacteristics[characteristicUUID] =
         new BluetoothCharacteristic(this.log, characteristicConfig, this.prefix);
+    this.addOptionalCharacteristic(Eve.Characteristics.TemperatureSensor);
   }
 
   this.homebridgeService = null;
