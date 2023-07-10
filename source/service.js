@@ -1,10 +1,9 @@
-var Service, BluetoothCharacteristic, Eve;
+var Service, BluetoothCharacteristic;
 import chalk from 'chalk';
 
-export default function (service, bluetoothCharacteristic, eve) {
+export default function (service, bluetoothCharacteristic) {
   Service = service;
   BluetoothCharacteristic = bluetoothCharacteristic;
-  Eve = eve;
   return BluetoothService;
 }
 
@@ -56,7 +55,6 @@ BluetoothService.prototype.connect = function (nobleService, homebridgeService) 
   this.homebridgeService = homebridgeService;
 
   this.nobleService = nobleService;
-  this.historyService = Eve.Service.TemperatureSensor;
   this.nobleService.discoverCharacteristics([], this.discoverCharacteristics.bind(this));
 };
 

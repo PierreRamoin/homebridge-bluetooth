@@ -1,13 +1,13 @@
-var Noble, UUIDGen, Accessory, BluetoothAccessory;
+var Noble, UUIDGen, Accessory, BluetoothAccessory, Eve;
 
 import fakegato from "fakegato-history";
 
-export default function (noble, uuidGen, accessory, bluetoothAccessory) {
+export default function (noble, uuidGen, accessory, bluetoothAccessory, eve) {
   Noble = noble;
   UUIDGen = uuidGen
   Accessory = accessory;
   BluetoothAccessory = bluetoothAccessory;
-
+  Eve = eve;
   return BluetoothPlatform;
 }
 
@@ -27,11 +27,7 @@ function BluetoothPlatform(log, config, homebridgeAPI) {
   for (var accessoryConfig of config.accessories) {
     var accessoryAddress = trimAddress(accessoryConfig.address);
     let bluetoothAccessory = new BluetoothAccessory(this.log, accessoryConfig);
-    bluetoothAccessory.fakeGatoService = new this.FakeGatoHistoryService(
-        "room",
-        bluetoothAccessory,
-        {storage:'fs', path:"/homebridge"}
-    )
+    this.historyService = Eve.Services.History(bluetoothAccessory);
     this.bluetoothAccessories[accessoryAddress] = bluetoothAccessory;
   }
   this.cachedHomebridgeAccessories = {};

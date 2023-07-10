@@ -17,8 +17,8 @@ export default function (homebridge) {
   UUIDGen = homebridge.hap.uuid;
   Eve = new homebridgeLib.EveHomeKitTypes(homebridge);
   let BluetoothCharacteristic = BluetoothCharacteristicFactory(Characteristic, FakeGatoHistoryService);
-  let BluetoothService = BluetoothServiceFactory(Service, BluetoothCharacteristic, Eve);
+  let BluetoothService = BluetoothServiceFactory(Service, BluetoothCharacteristic);
   let BluetoothAccessory = BluetoothAccessoryFactory(Accessory, BluetoothService);
-  let BluetoothPlatform = BluetoothPlatformFactory(Noble, UUIDGen, Accessory, BluetoothAccessory);
+  let BluetoothPlatform = BluetoothPlatformFactory(Noble, UUIDGen, Accessory, BluetoothAccessory, Eve);
   homebridge.registerPlatform("homebridge-bluetooth", "Bluetooth", BluetoothPlatform, true);
 }
