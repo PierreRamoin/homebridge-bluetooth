@@ -46,6 +46,7 @@ function BluetoothService(log, config, prefix) {
 
   this.homebridgeService = null;
   this.nobleService = null;
+  this.historyService = null;
 }
 
 
@@ -55,6 +56,7 @@ BluetoothService.prototype.connect = function (nobleService, homebridgeService) 
   this.homebridgeService = homebridgeService;
 
   this.nobleService = nobleService;
+  this.historyService = Eve.Service.TemperatureSensor;
   this.nobleService.discoverCharacteristics([], this.discoverCharacteristics.bind(this));
 };
 
