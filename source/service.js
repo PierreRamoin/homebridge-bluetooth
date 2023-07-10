@@ -42,7 +42,6 @@ function BluetoothService(log, config, prefix) {
     var characteristicUUID = trimUUID(characteristicConfig.UUID);
     this.bluetoothCharacteristics[characteristicUUID] =
         new BluetoothCharacteristic(this.log, characteristicConfig, this.prefix);
-    this.addOptionalCharacteristic(Eve.Characteristics.TemperatureSensor);
   }
 
   this.homebridgeService = null;
