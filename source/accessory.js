@@ -13,7 +13,7 @@ export default function (accessory, bluetoothService) {
 
 class BluetoothAccessory extends homebridgeLib.AccessoryDelegate {
   constructor(platform, log, {name, address, services}) {
-    super(platform, {name, address, services});
+    super(platform, {id: address, name, address, services});
     this.log = log;
     this.fakeGatoService = undefined;
     Accessory.log = this.log;
