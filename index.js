@@ -4,6 +4,7 @@ import BluetoothServiceFactory from "./source/service.js";
 import BluetoothAccessoryFactory from "./source/accessory.js";
 import BluetoothPlatformFactory from "./source/platform.js";
 import homebridgeLib from "homebridge-lib"
+import packageJson from "./package.json"
 
 var Noble, Accessory, Service, Characteristic, UUIDGen, FakeGatoHistoryService, Eve;
 
@@ -20,5 +21,5 @@ export default function (homebridge) {
   let BluetoothService = BluetoothServiceFactory(Service, BluetoothCharacteristic);
   let BluetoothAccessory = BluetoothAccessoryFactory(Accessory, BluetoothService);
   let BluetoothPlatform = BluetoothPlatformFactory(Noble, UUIDGen, Accessory, BluetoothAccessory, Eve);
-  homebridge.registerPlatform("homebridge-bluetooth", "Bluetooth", BluetoothPlatform, true);
+  BluetoothPlatform.loadPlatform(homebridge, packageJson, "Bluetooth", BluetoothPlatform);
 }
