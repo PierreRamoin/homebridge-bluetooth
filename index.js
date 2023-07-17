@@ -4,7 +4,7 @@ import BluetoothServiceFactory from "./source/service.js";
 import BluetoothAccessoryFactory from "./source/accessory.js";
 import BluetoothPlatformFactory from "./source/platform.js";
 import homebridgeLib from "homebridge-lib"
-import packageJson from "./package.json"
+import packageJson from "./package.json" assert { type: "json" }
 
 var Noble, Accessory, Service, Characteristic, UUIDGen, FakeGatoHistoryService, Eve;
 
