@@ -45,11 +45,6 @@ class BluetoothPlatform extends homebridgeLib.Platform {
     configureAccessory(homebridgeAccessory) {
         const accessoryAddress = homebridgeAccessory.context['address'];
         const bluetoothAccessory = this.bluetoothAccessories[accessoryAddress];
-        bluetoothAccessory.fakeGatoService = new this.FakeGatoHistoryService(
-            "room",
-            bluetoothAccessory,
-            {storage: 'fs', path: "/homebridge"}
-        )
         if (!bluetoothAccessory) {
             this.log.debug(`Removed | ${homebridgeAccessory.displayName} (${accessoryAddress})`);
             this.homebridgeAPI.unregisterPlatformAccessories("homebridge-bluetooth", "Bluetooth",
