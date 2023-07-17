@@ -33,7 +33,7 @@ class BluetoothPlatform extends homebridgeLib.Platform {
         this.bluetoothAccessories = {};
         for (const accessoryConfig of config.accessories) {
             const accessoryAddress = trimAddress(accessoryConfig.address);
-            let bluetoothAccessory = new BluetoothAccessory(this.log, accessoryConfig);
+            let bluetoothAccessory = new BluetoothAccessory(this, this.log, accessoryConfig);
             this.bluetoothAccessories[accessoryAddress] = bluetoothAccessory;
         }
         this.cachedHomebridgeAccessories = {};
